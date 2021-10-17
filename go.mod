@@ -1,4 +1,4 @@
-module arp242.net/termtext
+module zgo.at/termtext
 
 go 1.16
 
