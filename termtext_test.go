@@ -134,3 +134,48 @@ func TestAlign(t *testing.T) {
 		})
 	}
 }
+
+func TestSlice(t *testing.T) {
+	tests := []struct {
+		in          string
+		start, stop int
+		want        string
+	}{
+		{"", 0, 0, ""},
+		{"abc", 0, 0, ""},
+		{"abc", 1, 1, ""},
+
+		{"abc", 0, 1, "a"},
+		{"abc", 1, 2, "b"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 0, 10,
+			"┌─ \x1b[1mAshidee"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 0, 37,
+			"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 0, 38,
+			"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 0, 308,
+			"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 1, 38,
+			"─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 1, 308,
+			"─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐"},
+
+		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 3, 15,
+			"Ashideena +2"},
+	}
+
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%s_%d_%d", tt.in, tt.start, tt.stop), func(t *testing.T) {
+			have := Slice(tt.in, tt.start, tt.stop)
+			if have != tt.want {
+				t.Errorf("\nhave: %q\nwant: %q", have, tt.want)
+			}
+		})
+	}
+}

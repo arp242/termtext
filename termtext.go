@@ -136,8 +136,11 @@ func AlignCenter(s string, w int) string {
 //
 // Tabs will be expanded to spaces.
 func Slice(s string, start, stop int) string {
-	s = Expand(s)
+	if start == stop {
+		return ""
+	}
 
+	s = Expand(s)
 	var (
 		g                 = uniseg.NewGraphemes(s)
 		startOff, stopOff int
@@ -176,6 +179,9 @@ func Slice(s string, start, stop int) string {
 		default:
 			pos += runewidth.RuneWidth(r)
 		}
+	}
+	if stopOff == 0 {
+		stopOff = len(s)
 	}
 	return s[startOff:stopOff]
 }
