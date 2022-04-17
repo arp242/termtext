@@ -179,3 +179,71 @@ func TestSlice(t *testing.T) {
 		})
 	}
 }
+
+func TestWrap(t *testing.T) {
+	tests := []struct {
+		in                     string
+		w                      int
+		prefix                 string
+		wantWrap, wantWordWrap string
+	}{
+		{"", 10, "", "", ""},
+		{"Hello, world!", 15, "", "Hello, world!", "Hello, world!"},
+		{"Hello, world!", 15, "XX", "Hello, world!", "Hello, world!"},
+
+		{"Hello, world!", 10, "", "Hello, wor\nld!", "Hello,\nworld!"},
+		{"Hello, world!", 10, "XX", "Hello, wor\nXXld!", "Hello,\nXXworld!"},
+
+		{`
+This crude wooden club burns with the raging spirit of the demon forever trapped within by the powerful enchantments placed on the weapon. Occasionally, however, the demon's wrath escapes in a fiery blast.
+
+STATISTICS:
+
+Combat abilities:
+– 20% chance per hit target will take an additional 10 points of fire damage
+– 7% chance per hit a 15-ft. radius fireball will automatically detonate (5d6 fire damage; Save vs. Spell for half)
+`, 75, "",
+			// Wrap()
+			`
+This crude wooden club burns with the raging spirit of the demon forever tr
+apped within by the powerful enchantments placed on the weapon. Occasionall
+y, however, the demon's wrath escapes in a fiery blast.
+
+STATISTICS:
+
+Combat abilities:
+– 20% chance per hit target will take an additional 10 points of fire damag
+e
+– 7% chance per hit a 15-ft. radius fireball will automatically detonate (5
+d6 fire damage; Save vs. Spell for half)
+`,
+			// WordWrap()
+			`
+This crude wooden club burns with the raging spirit of the demon forever
+trapped within by the powerful enchantments placed on the weapon.
+Occasionally, however, the demon's wrath escapes in a fiery blast.
+
+STATISTICS:
+
+Combat abilities:
+– 20% chance per hit target will take an additional 10 points of fire damage
+– 7% chance per hit a 15-ft. radius fireball will automatically detonate
+(5d6 fire damage; Save vs. Spell for half)
+`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run("", func(t *testing.T) {
+			have := Wrap(tt.in, tt.w, tt.prefix)
+			if have != tt.wantWrap {
+				t.Errorf("Wrap() wrong\nhave:\n%s\nwant:\n%s", have, tt.wantWrap)
+			}
+
+			have = WordWrap(tt.in, tt.w, tt.prefix)
+			if have != tt.wantWordWrap {
+				t.Errorf("WordWrap() wrong\nhave:\n%s\nwant:\n%s", have, tt.wantWordWrap)
+			}
+		})
+	}
+}

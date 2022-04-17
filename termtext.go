@@ -2,6 +2,7 @@
 package termtext
 
 import (
+	"bytes"
 	"strings"
 	"unicode"
 
@@ -25,13 +26,13 @@ func Width(s string) int {
 	for g.Next() {
 		runes := g.Runes()
 
-		// More than one codepoint: use the width of the first one non-zero one.
+		/// More than one codepoint: use the width of the first one non-zero one.
 		if len(runes) > 1 {
 			l += clusterWidth(runes)
 			continue
 		}
 
-		// One codepoint: check for tab and escapes.
+		/// One codepoint: check for tab and escapes.
 		switch r := runes[0]; {
 		case r == '\t':
 			l += TabWidth - l%TabWidth
@@ -66,7 +67,7 @@ func Expand(s string) string {
 			continue
 		}
 
-		// One codepoint: check for tab and escapes.
+		/// One codepoint: check for tab and escapes.
 		switch r := runes[0]; {
 		case r == '\t':
 			tw := TabWidth - l%TabWidth
@@ -168,7 +169,7 @@ func Slice(s string, start, stop int) string {
 			continue
 		}
 
-		// One codepoint: check for tab and escapes.
+		/// One codepoint: check for tab and escapes.
 		switch r := runes[0]; {
 		case r == '\x1b':
 			esc = true
@@ -201,6 +202,7 @@ func Wrap(s string, w int, prefix string) string {
 		l = 0
 		b strings.Builder
 	)
+	b.Grow(len(s))
 	for g.Next() {
 		runes := g.Runes()
 
@@ -237,14 +239,16 @@ func Wrap(s string, w int, prefix string) string {
 func WordWrap(s string, w int, prefix string) string {
 	var (
 		g       = uniseg.NewGraphemes(s)
-		b       strings.Builder
+		b       bytes.Buffer
 		lineLen int
 		wordLen int
 		word    strings.Builder
 	)
+	b.Grow(len(s))
 	for g.Next() {
 		runes := g.Runes()
 
+		/// Line break in input: reset word; start a new line.
 		if len(runes) == 1 && runes[0] == '\n' {
 			b.WriteString(word.String())
 			b.WriteByte('\n')
@@ -257,10 +261,11 @@ func WordWrap(s string, w int, prefix string) string {
 
 		runesLen := clusterWidth(runes)
 
-		// Note that unicode word breaks are actually quite a bit more complex,
-		// but yeah, this should be "good enough".
+		/// Note that unicode word breaks are actually quite a bit more complex,
+		/// but yeah, this should be "good enough".
 		if len(runes) == 1 && isBreak(runes[0]) {
 			if lineLen > w { /// Break and write word on next line.
+				b.Truncate(b.Len() - 1) /// Trailing space.
 				b.WriteByte('\n')
 				b.WriteString(prefix)
 				b.WriteString(word.String())
@@ -285,8 +290,11 @@ func WordWrap(s string, w int, prefix string) string {
 		wordLen += runesLen
 		word.WriteString(string(runes))
 	}
+
+	/// Last word.
 	if lineLen > 0 {
 		if lineLen > w {
+			b.Truncate(b.Len() - 1) /// Trailing space.
 			b.WriteByte('\n')
 			b.WriteString(prefix)
 		}

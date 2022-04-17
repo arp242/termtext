@@ -13,13 +13,9 @@ with this:
 4. Some characters aren't actually printed to the screen, such as the zero-width
    space and escape sequences to set the colour.
 
-[uniseg] takes care of the first point, [go-runewidth] of the second, and this
-package of the third and fourth.
+This package takes care of these issue.
 
 Import as `zgo.at/termtext` – godoc: https://godocs.io/zgo.at/termtext
-
-[uniseg]: https://github.com/mattn/go-runewidth
-[go-runewidth]: https://github.com/rivo/uniseg
 
 ---
 
