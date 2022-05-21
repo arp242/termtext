@@ -226,10 +226,47 @@ Occasionally, however, the demon's wrath escapes in a fiery blast.
 STATISTICS:
 
 Combat abilities:
-– 20% chance per hit target will take an additional 10 points of fire damage
+– 20% chance per hit target will take an additional 10 points of fire 
+damage
 – 7% chance per hit a 15-ft. radius fireball will automatically detonate
 (5d6 fire damage; Save vs. Spell for half)
 `,
+		},
+
+		{
+			`Priests of Horus-Re in far off Mulhorand were the first to create this life-saving potion. A foul-smelling brew, it is made by boiling used mummy wrappings along with naturally desiccated animal remains. The resulting tea can then be consumed to neutralize the effects of disease and certain afflictions.
+
+STATISTICS:
+
+Special: Cures blindness, deafness, and disease
+
+Weight: 1`,
+			59,
+			"",
+			`Priests of Horus-Re in far off Mulhorand were the first to 
+create this life-saving potion. A foul-smelling brew, it is
+made by boiling used mummy wrappings along with naturally d
+esiccated animal remains. The resulting tea can then be con
+sumed to neutralize the effects of disease and certain affl
+ictions.
+
+STATISTICS:
+
+Special: Cures blindness, deafness, and disease
+
+Weight: 1`,
+			`Priests of Horus-Re in far off Mulhorand were the first to
+create this life-saving potion. A foul-smelling brew, it is
+made by boiling used mummy wrappings along with naturally
+desiccated animal remains. The resulting tea can then be
+consumed to neutralize the effects of disease and certain 
+afflictions.
+
+STATISTICS:
+
+Special: Cures blindness, deafness, and disease
+
+Weight: 1`,
 		},
 	}
 

@@ -218,8 +218,16 @@ func Wrap(s string, w int, prefix string) string {
 		if l+cw > w {
 			b.WriteByte('\n')
 			b.WriteString(prefix)
-			b.WriteString(string(runes))
-			l = cw
+			if len(runes) == 1 && unicode.IsSpace(runes[0]) { /// No spaces at start of line.
+				l = 0
+			} else {
+				b.WriteString(string(runes))
+				l = cw
+			}
+			continue
+		}
+
+		if l == 0 && len(runes) == 1 && unicode.IsSpace(runes[0]) { /// No spaces at start of line.
 			continue
 		}
 
@@ -237,6 +245,7 @@ func Wrap(s string, w int, prefix string) string {
 //
 // Tabs will be expanded to spaces.
 func WordWrap(s string, w int, prefix string) string {
+	s = Expand(s)
 	var (
 		g       = uniseg.NewGraphemes(s)
 		b       bytes.Buffer
@@ -250,6 +259,10 @@ func WordWrap(s string, w int, prefix string) string {
 
 		/// Line break in input: reset word; start a new line.
 		if len(runes) == 1 && runes[0] == '\n' {
+			if lineLen+wordLen > w {
+				b.WriteByte('\n')
+				b.WriteString(prefix)
+			}
 			b.WriteString(word.String())
 			b.WriteByte('\n')
 			b.WriteString(prefix)
@@ -305,7 +318,7 @@ func WordWrap(s string, w int, prefix string) string {
 }
 
 func isBreak(r rune) bool {
-	return unicode.IsSpace(r) && r != 0x0a
+	return unicode.IsSpace(r) && r != '\n'
 }
 
 func clusterWidth(runes []rune) int {
