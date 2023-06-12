@@ -307,8 +307,10 @@ func WordWrap(s string, w int, prefix string) string {
 	/// Last word.
 	if lineLen > 0 {
 		if lineLen > w {
-			b.Truncate(b.Len() - 1) /// Trailing space.
-			b.WriteByte('\n')
+			if b.Len() > 0 {
+				b.Truncate(b.Len() - 1) /// Trailing space.
+				b.WriteByte('\n')
+			}
 			b.WriteString(prefix)
 		}
 		b.WriteString(word.String())

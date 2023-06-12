@@ -193,6 +193,12 @@ func TestWrap(t *testing.T) {
 
 		{"Hello, world!", 10, "", "Hello, wor\nld!", "Hello,\nworld!"},
 		{"Hello, world!", 10, "XX", "Hello, wor\nXXld!", "Hello,\nXXworld!"},
+		{
+			"https://www.fastmail.help/hc/en-us/articles/360058753614-Why-messages-bounce-back",
+			80, "",
+			"https://www.fastmail.help/hc/en-us/articles/360058753614-Why-messages-bounce-bac\nk",
+			"https://www.fastmail.help/hc/en-us/articles/360058753614-Why-messages-bounce-back",
+		},
 
 		{`
 This crude wooden club burns with the raging spirit of the demon forever trapped within by the powerful enchantments placed on the weapon. Occasionally, however, the demon's wrath escapes in a fiery blast.
