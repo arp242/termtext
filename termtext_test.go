@@ -290,3 +290,18 @@ Weight: 1`,
 		})
 	}
 }
+
+func BenchmarkWidth(b *testing.B) {
+	for _, s := range []string{
+		"",
+		"Hello",
+		strings.Repeat("Just some plain ASCII text", 10),
+		"More \x1b[1mcomplex\x1b[0m text 🙃 \t 🙃 \t 🙃",
+	} {
+		b.Run("", func(b *testing.B) {
+			for n := 0; n < b.N; n++ {
+				Width(s)
+			}
+		})
+	}
+}
