@@ -13,6 +13,21 @@ import (
 // Number of spaces to count a tab as.
 var TabWidth = 8
 
+// Widths sets the width for the given runes.
+//
+// This can be useful in some cases where the written text is different. For
+// example when encoding JSON some characters get written as a \-escape. To
+// account for this, you can override the width for those:
+//
+//	termtext.Escapes = map[rune]int{
+//		'\b': 2,
+//		'\f': 2,
+//		'\n': 2,
+//		'\r': 2,
+//		'\t': 2,
+//	}
+var Widths map[rune]int
+
 // Width gets the display width of a string.
 //
 // The "display width" is the number of columns a string will occupy in a
@@ -29,6 +44,11 @@ func Width(s string) int {
 		/// More than one codepoint: use the width of the first one non-zero one.
 		if len(runes) > 1 {
 			l += clusterWidth(runes)
+			continue
+		}
+
+		if ll, ok := Widths[runes[0]]; ok {
+			l += ll
 			continue
 		}
 
