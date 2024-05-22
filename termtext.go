@@ -6,8 +6,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/mattn/go-runewidth"
 	"github.com/rivo/uniseg"
+	"zgo.at/runewidth"
 )
 
 // Number of spaces to count a tab as.
