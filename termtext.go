@@ -194,12 +194,13 @@ func Slice(s string, start, stop int) string {
 		case r == '\x1b':
 			esc = true
 		case esc:
-			if r == 'm' {
-				esc = false
-			}
+			esc = r != 'm'
 		default:
 			pos += runewidth.RuneWidth(r)
 		}
+	}
+	if start == 0 {
+		startOff = 0
 	}
 	if stopOff == 0 {
 		stopOff = len(s)

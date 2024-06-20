@@ -168,10 +168,13 @@ func TestSlice(t *testing.T) {
 
 		{"┌─ \x1b[1mAshideena +2\x1b[0m ────┬─ \x1b[1mAttributes\x1b[0m ───┐", 3, 15,
 			"Ashideena +2"},
+
+		{"1\x1b[1m23\x1b[0m", 0, 2, "1\x1b[1m2"},
+		{"\x1b[1m123\x1b[0m", 0, 2, "\x1b[1m12"},
 	}
 
 	for _, tt := range tests {
-		t.Run(fmt.Sprintf("%s_%d_%d", tt.in, tt.start, tt.stop), func(t *testing.T) {
+		t.Run("", func(t *testing.T) {
 			have := Slice(tt.in, tt.start, tt.stop)
 			if have != tt.want {
 				t.Errorf("\nhave: %q\nwant: %q", have, tt.want)
